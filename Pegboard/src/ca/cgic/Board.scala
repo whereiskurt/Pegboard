@@ -104,9 +104,13 @@ object MatrixBoard {
       }
     }
 
-    
-    
     def flipBit(row: Int, col: Int) = setBit(row, col, !getBit(row, col))
+
+    def rotatedBoard(): Board = {
+      var newBoard = new Board(this)
+
+      newBoard
+    }
 
     //We have to loop over every ROW which contains a COL.
     def getCol(col: Int): Row = {
@@ -132,6 +136,20 @@ object MatrixBoard {
         allYMatched &= this.getBit(row + offset, col) == rule(offset)
       }
       allYMatched
+    }
+
+    def permutations(): Int = permutateBoard().size
+
+    def piecesOnBoard(): Int = {
+      var pieces = 0
+      for (
+        row <- 0 until height;
+        col <- 0 until width
+      ) {
+        var bit = this.getBit(row, col)
+        if (bit == true) pieces = pieces + 1
+      }
+      pieces
     }
 
     def permutateBoard(): List[Board] = {
@@ -180,10 +198,10 @@ object MatrixBoard {
       newBoards
     }
 
-    val BOARD_CENTER_PEG_ONLY : String = "FDyn53d8rMG8cicFjjv2ggeyyHI="
-    val BOARD_EARLY_RANDOM : String = "lOTiDVhb0ofU89YzDcI8DBiMIm8="
-    
-    def isWinner(): Boolean = getUid == BOARD_EARLY_RANDOM 
+    val BOARD_CENTER_PEG_ONLY: String = "FDyn53d8rMG8cicFjjv2ggeyyHI="
+    val BOARD_EARLY_RANDOM: String = "lOTiDVhb0ofU89YzDcI8DBiMIm8="
+
+    def isWinner(): Boolean = getUid == BOARD_EARLY_RANDOM
 
     override def toString() = {
       val matrixOutput = new StringBuilder()
@@ -205,7 +223,7 @@ object MatrixBoard {
 
         matrixOutput.append("\n")
       }
-      matrixOutput.append(" ]\n")
+      matrixOutput.append(s" ] ${permutations} possible moves, with ${piecesOnBoard} pieces.\n")
       matrixOutput.toString
     }
 
